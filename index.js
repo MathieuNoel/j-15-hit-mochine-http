@@ -56,45 +56,49 @@ const hitParade = [
 
 // Votre code va ici
 let count = 0
-
+// On crée un server avec la méthode creatServer de http
 const server = http.createServer((req, res) => {
-    res.write(`
-        <head>
-            <style>
-                body{
-                    text-align: center;
-                };
-                h1{
-                    font-size: 4em;
-                    color: blue;  
-                }                    
-                p{
-                    margin: 0;
-                    font-size: 1em;
-                } 
-            </style>
-        </head>
-    `)
+   let html = `
+    <head> 
+        <style>
+            body{
+                text-align: center;
+            };
+            h1{
+                font-size: 4em;                  
+            }                    
+            p{
+                margin: 0;
+                font-size: 1em;
+                color: blue;
+            } 
+        </style>
+    </head>
+    <body>
+`
 
-    
+    console.log(req.url)
     switch(req.url) {
     case '/':
-        res.write(`Je m'appelle Charlu, je m'appelle Lili, vous êtes chez O'clock`);
+        // res.write(``);
+        html+= `<p>Je m'appelle Charlu, je m'appelle Lili, vous êtes chez O'clock</p>`
         count++;
         break;
     case '/classement':
         for (let i = 0; i < hitParade.length; i++) {
-            res.write(`<p>${hitParade[i].position} - ${hitParade[i].artist} - ${hitParade[i].title}</p>`)              
+            html+=`<p>${hitParade[i].position} - ${hitParade[i].artist} - ${hitParade[i].title}</p>`              
           }        
         break;
     case '/stats':
-        res.write(count);
+        html+=`${count}`;
         break;
     default: 
         res.statusCode = 404;
-        res.write(`404, page non trouvée`)       
+        html+=`404, page non trouvée`;      
         break;
 }
+html+=`</body>`
+res.write(html)
 res.end();
 })
 server.listen(3000);
