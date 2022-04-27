@@ -1,5 +1,5 @@
 // Ajouter ici le ou les require() pour importer les modules dont vous aurez besoin.
-
+const http = require('http');
 // Hit parade, classé du premier au dernier.
 const hitParade = [
     {
@@ -55,3 +55,46 @@ const hitParade = [
 ];
 
 // Votre code va ici
+let count = 0
+
+const server = http.createServer((req, res) => {
+    res.write(`
+        <head>
+            <style>
+                body{
+                    text-align: center;
+                };
+                h1{
+                    font-size: 4em;
+                    color: blue;  
+                }                    
+                p{
+                    margin: 0;
+                    font-size: 1em;
+                } 
+            </style>
+        </head>
+    `)
+
+    
+    switch(req.url) {
+    case '/':
+        res.write(`Je m'appelle Charlu, je m'appelle Lili, vous êtes chez O'clock`);
+        count++;
+        break;
+    case '/classement':
+        for (let i = 0; i < hitParade.length; i++) {
+            res.write(`<p>${hitParade[i].position} - ${hitParade[i].artist} - ${hitParade[i].title}</p>`)              
+          }        
+        break;
+    case '/stats':
+        res.write(count);
+        break;
+    default: 
+        res.statusCode = 404;
+        res.write(`404, page non trouvée`)       
+        break;
+}
+res.end();
+})
+server.listen(3000);
