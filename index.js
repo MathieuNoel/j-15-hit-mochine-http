@@ -57,8 +57,10 @@ const hitParade = [
 
 // Votre code va ici
 let count = 0
-// Je crée un server avec la méthode creatServer de http
+// Je crée un server avec la méthode creatServer de http avec une fonction de callback (req, res)
 const server = http.createServer((req, res) => {
+    // Pour réglé le problème d'accent en affichage sur le navigateur on rajoute un type mim
+    res.setHeader('content-type', 'text/html;charset=utf-8')
     // BONUS je crée des balise html dans une variable pour donner du style et un body sur l'affichage de mon navigateur
    let html = `
     <head> 
@@ -86,22 +88,21 @@ const server = http.createServer((req, res) => {
         count++;
         // pour sortir d'un case on met tjrs un break; !
         break;
-        // J' affiche mon classement si la page :3000/classement est demandée  BONUS idem <p></p> dans ma balise html
-    case '/classement':
+    case '/classement':    
         for (let i = 0; i < hitParade.length; i++) {
-            html+=`<p>${hitParade[i].position} - ${hitParade[i].artist} - ${hitParade[i].title}</p>`              
+            html+=`<li>${hitParade[i].position} - ${hitParade[i].artist} - ${hitParade[i].title}</li>`              
           }
           // pour sortir d'un case on met tjrs un break; !        
         break;
         // J' affiche mon count si la page :3000/stats est demandée
     case '/stats':
-        html+=`${count}`;
+        html+=`<p>cette chanson a été vue ${count} fois !</p>`;
         // pour sortir d'un case on met tjrs un break; !
         break;
         // si aucune reponse attendu est donné, alors on affiche erreur 404 avec le code dans le network
     default: 
         res.statusCode = 404;
-        html+=`404, page non trouvée`;
+        html+=`<p>404, page non trouvée</p>`;
         // pour sortir d'un case on met tjrs un break; !      
         break;
 }
@@ -111,5 +112,5 @@ html+=`</body>`;
 res.write(html);
 res.end();
 })
-// Je choisi un port pour mon server
+// J'écoute et je choisi un port pour mon server
 server.listen(3000);
